@@ -1,0 +1,1 @@
+'Blue Whale'.indexOf('Blue') !== -1;
