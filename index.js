@@ -1,6 +1,7 @@
 require('dotenv').config();
 const token  = process.env.TOKEN;
 const dictionary = require('./dictionary');
+const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
@@ -13,7 +14,17 @@ app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수
 app.on('message', msg => {
     if(msg.author.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
         return;
-    } else if(msg.content.indexOf('노준') !== -1) msg.channel.send(`ㄷㅊ!`); 
+    }
+    if(msg.content.indexOf('노준') !== -1) {
+        msg.channel.send(`ㄷㅊ!`);
+    }
+    
+    if(msg.content.startsWith('아무말 ')) {
+        const keyword = msg.content.substring(4);
+        const text = anyWords(sejongDict, keyword);
+        msg.channel.send(text);
+    
+    }
     // 채팅에서 메세지가 들어왔을 때 실행할 콜백함수입니다.
     // indexOf('') !== -1을 이용해서 메세지 속에 단어가 있는지 확인
 
