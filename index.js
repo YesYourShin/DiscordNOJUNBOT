@@ -1,4 +1,5 @@
-const { token } = require('./token.js'); // token 값을 따로 js파일을 만들어주고 module.exports를 사용하여 token이 코드에 노출되는 것을 조금이라도 방지합니다.
+require('dotenv').config();
+const token  = process.env.TOKEN;
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
