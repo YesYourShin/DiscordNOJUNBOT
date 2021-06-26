@@ -21,11 +21,13 @@ app.on('message', msg => {
         msg.channel.send(`ㄷㅊ!`);
     }
     
-    if(msg.content.startsWith('아무말 ')) {
-        const keyword = msg.content.substring(4);
+    if(msg.content.includes('아무말')) {
+        const words = msg.content.replace('아무말', "").split(' ').filter(word => word != '');
+        const rd = Math.floor(Math.random() * words.length);
+        const keyword = words[rd];
         const text = anyWords.generate(sejongDict, keyword);
         msg.channel.send(text);
-    
+        
     }
     if(msg.content.startsWith('랜덤카드')) {
         const name = anyWords.cardName(cardNameDict, 2, 5);
