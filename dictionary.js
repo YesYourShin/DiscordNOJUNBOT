@@ -4,7 +4,7 @@ function makeDictionary(path) {
     const content = fs.readFileSync(path).toString(); // 파일을 불러와서 스트링 변환시켜 변수에 저장
     const sentences = content.split(/\r?\n/); // 변수에 저장된 문자열을 줄바꿈을 기준으로 끊어서 배열로 저장
     const dictionary = {}; // 빈 사전
-    
+    sentences.unshift('<START>');
     
     for(let i in sentences) { // 기본 for 문에 대응됨
         const words = sentences[i].split(' '); 

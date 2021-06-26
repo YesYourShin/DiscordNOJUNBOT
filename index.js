@@ -28,8 +28,8 @@ app.on('message', msg => {
     
     }
     if(msg.content.startsWith('랜덤카드')) {
-        const name = anyWords(cardNameDict, "");
-        const description = anyWords(cardDescDict, "").replace(/\\n/g, '\n');
+        const name = anyWords(cardNameDict, '<START>');
+        const description = anyWords(cardDescDict, '<START>').replace(/\\n/g, '\n');
         const text = `[${name}]\n\n${description}`;
         
         msg.channel.send(text);
