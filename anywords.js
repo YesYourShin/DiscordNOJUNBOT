@@ -1,4 +1,4 @@
-function anyWords(dictionary, keyword) { // 아무말 커맨드 사용 시 호출, 사전과 키워드가 들어온다
+function generate(dictionary, keyword, minlength=10, randomlength=10) { // 아무말 커맨드 사용 시 호출, 사전과 키워드가 들어온다
     const match = []; // 키워드로 시작하는 단어를 모을 배열
     const keys = Object.keys(dictionary); // key:value에서 key만 가져옴
     for(let key of keys) { // 모든 키들에 대하여 
@@ -19,7 +19,7 @@ function anyWords(dictionary, keyword) { // 아무말 커맨드 사용 시 호�
 
     result.push(keyword); // 처음 키워드 배열에 저장
 
-    const length = Math.floor(Math.random() * 10) + 10; // 문장 길이 선택(기본 10개의 단어 + 랜덤 최대 10개 추가)
+    const length = Math.floor(Math.random() * randomlength) + minlength; // 문장 길이 선택(기본 10개의 단어 + 랜덤 최대 10개 추가)
     for(let i = 0; i < length ; i++) { // 만들 문장 길이만큼 반복
         const talk = dictionary[keyword]; // 사전에서 현재 단어의 다음 단어를 검색
         if(!talk) break; // 다음 단어가 없을 경우 끝
@@ -33,4 +33,17 @@ function anyWords(dictionary, keyword) { // 아무말 커맨드 사용 시 호�
 
 }
 
-module.exports = anyWords;
+function cardName(dictionary, minlength=10, randomlength=10) {
+    const keys = Object.keys(dictionary);
+    const result = [];
+
+    const length = Math.floor(Math.random() * randomlength) + minlength; // 문장 길이 선택(기본 10개의 단어 + 랜덤 최대 10개 추가)
+    for(let i = 0; i < length ; i++) { 
+        const krd = Math.floor(Math.random() * keys.length);
+        result.push(keys[krd]);
+    }
+
+    return result.join(" ");
+}
+
+module.exports = {generate, cardName};

@@ -23,13 +23,13 @@ app.on('message', msg => {
     
     if(msg.content.startsWith('아무말 ')) {
         const keyword = msg.content.substring(4);
-        const text = anyWords(sejongDict, keyword);
+        const text = anyWords.generate(sejongDict, keyword);
         msg.channel.send(text);
     
     }
     if(msg.content.startsWith('랜덤카드')) {
-        const name = anyWords(cardNameDict, '<START>');
-        const description = anyWords(cardDescDict, '<START>').replace(/\\n/g, '\n');
+        const name = anyWords.cardName(cardNameDict, 2, 5);
+        const description = anyWords.generate(cardDescDict, '<START>', 10, 100).replace(/\\n/g, '\n');
         const text = `[${name}]\n\n${description}`;
         
         msg.channel.send(text);
