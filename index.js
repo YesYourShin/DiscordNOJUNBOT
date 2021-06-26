@@ -6,6 +6,8 @@ const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
 const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
+const cardNameDict = dictionary.makeDictionary('dict/card-name.txt');
+const cardDescDict = dictionary.makeDictionary('dict/card-desc.txt');
 
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
@@ -25,6 +27,14 @@ app.on('message', msg => {
         msg.channel.send(text);
     
     }
+    if(msg.content.startsWith('랜덤카드')) {
+        const name = anyWords(cardNameDict, "");
+        const description = anyWords(cardDescDict, "").replace(/\\n/g, '\n');
+        const text = `[${name}]\n\n${description}`;
+        
+        msg.channel.send(text);
+    }
+
     // 채팅에서 메세지가 들어왔을 때 실행할 콜백함수입니다.
     // indexOf('') !== -1을 이용해서 메세지 속에 단어가 있는지 확인
 
