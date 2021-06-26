@@ -5,7 +5,7 @@ const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
-const sejongDict = dictionary.makeDictionary('dict/sejong10000.txt');
+const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
 
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
