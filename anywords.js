@@ -8,9 +8,15 @@ function anyWords(dictionary, keyword) { // 아무말 커맨드 사용 시 호�
     }
 
     const result = []; // 완성될 문장을 저장하는 배열
-    
-    const krd = Math.floor(Math.random() * match.length); // 키워드로 시작하는 단어 중에서 랜덤 선택
-    keyword = match[krd]; // 처음 키워드 설정
+
+    if(match.length > 0) { // 매치에 뭐가 있을 경우
+        const krd = Math.floor(Math.random() * match.length); // 키워드로 시작하는 단어 중에서 랜덤 선택
+        keyword = match[krd]; // 처음 키워드 설정
+    } else {
+        const krd = Math.floor(Math.random() * keys.length); // 사전에서 랜덤선택
+        keyword = keys[krd]; // 처음 키워드 설정
+    }
+
     result.push(keyword); // 처음 키워드 배열에 저장
 
     const length = Math.floor(Math.random() * 10) + 10; // 문장 길이 선택(기본 10개의 단어 + 랜덤 최대 10개 추가)
@@ -24,6 +30,7 @@ function anyWords(dictionary, keyword) { // 아무말 커맨드 사용 시 호�
     }
     
     return result.join(" "); // 배열을 공백을 간격으로 이어붙이기
+
 }
 
 module.exports = anyWords;
