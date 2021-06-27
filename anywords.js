@@ -33,17 +33,4 @@ function generate(dictionary, keyword, minlength=10, randomlength=10) { // 아�
 
 }
 
-function cardName(dictionary, minlength=10, randomlength=10) {
-    const keys = Object.keys(dictionary);
-    const result = [];
-
-    const length = Math.floor(Math.random() * randomlength) + minlength; // 문장 길이 선택(기본 10개의 단어 + 랜덤 최대 10개 추가)
-    for(let i = 0; i < length ; i++) { 
-        const krd = Math.floor(Math.random() * keys.length);
-        result.push(keys[krd]);
-    }
-
-    return result.join(" ");
-}
-
-module.exports = {generate, cardName};
+module.exports = {generate};
