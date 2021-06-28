@@ -5,11 +5,15 @@ const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
+const {getVoiceStream} = require("d-tts");
+const say = require('say')
+
 const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
 
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
 });
+
 
 app.on('message', msg => {
     if(msg.author.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
@@ -68,19 +72,36 @@ app.on('message', msg => {
 });
 
 
-
-app.on('voiceStateUpdate', member => {
-    let memberName = member.member.displayName;
+app.on('voiceStateUpdate', m => {
+    let memberName = m.member.displayName;
     
     console.log(memberName);
 
     
     if(memberName === 'BRORY') {
         // 채널을 지정해주는 함수
-        const channel = member.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
-        const user = member.guild.member(memberName);
+        const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
+        const user = m.guild.member(memberName);
+
         // 해당 채널에 메세지를 보냄
         // channel.send(member.mentions.user +"dddd");
+
+        
+        m.member.voice.channel.join()
+        say.speak('안녕하세요');
+        
+        // m.member.voice.channel.join().then(connection => {
+        //     say.speak(user);
+            
+        // });
+        // m.member.voice.channel.leave()
+        
+        
+        // .then(connection => console.log('connected!')).catch(console.error);
+            // const stream = getVoiceStream("테스트 TTS", "ko-KR");
+            // const dispatcher = connection.play(stream);
+            // dispatcher.on("finish", () => m.member.voice.channel.leave());
+       
     }
 
 
