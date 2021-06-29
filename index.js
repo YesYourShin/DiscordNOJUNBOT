@@ -28,8 +28,11 @@ app.on('message', msg => {
 
     if(msg.content.includes('아무말')) {
         const words = msg.content.replace('아무말', "").split(' ').filter(word => word != '');
+
         const rd = Math.floor(Math.random() * words.length);
+
         const keyword = words[rd];
+
         const text = anyWords.generate(sejongDict, keyword);
         msg.channel.send(text);
         
@@ -61,9 +64,7 @@ app.on('message', msg => {
             }
             
         }
-        // if (url.indexOf("png", url.length - "png".length /*or 3*/) !== -1) return;
-        // else if (url.indexOf("jpg", url.length - "jpg".length /*or 3*/) !== -1) return;
-        // return url.indexOf("png", url.length - "png".length /*or 3*/) !== -1;
+        
     }
 
 
