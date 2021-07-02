@@ -54,7 +54,7 @@ app.on('message', msg => {
     function attachIsImage(msgAttach) { 
         var url = msgAttach.url; // 첨부파일 주소를 가져옴
         //True if this url is a png image.
-        const fileName = ["png", "jpg", "gif", "webp"] // 파일 확장자
+        const fileName = ["png", "jpg", "gif", "webp", "jpeg"] // 파일 확장자
 
         // 올라온 파일 확장자와 fileName의 확장자에서 일치하는게 있는지 골라 일치할 경우 true 반환
         for (let i = 0 ; i < fileName.length ; i++) { 
@@ -67,46 +67,43 @@ app.on('message', msg => {
         
     }
 
-
-
-
 });
 
 
-app.on('voiceStateUpdate', m => {
-    let memberName = m.member.displayName;
+// app.on('voiceStateUpdate', m => {
+//     let memberName = m.member.displayName;
     
-    console.log(memberName);
+//     console.log(memberName);
 
     
-    if(memberName === 'BRORY') {
-        // 채널을 지정해주는 함수
-        const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
-        const user = m.guild.member(memberName);
+//     if(memberName === 'BRORY') {
+//         // 채널을 지정해주는 함수
+//         const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
+//         const user = m.guild.member(memberName);
 
-        // 해당 채널에 메세지를 보냄
-        // channel.send(member.mentions.user +"dddd");
+//         // 해당 채널에 메세지를 보냄
+//         // channel.send(member.mentions.user +"dddd");
 
         
-        m.member.voice.channel.join()
-        say.speak('안녕하세요');
+//         m.member.voice.channel.join()
+//         say.speak('an nyeong ha se yo');
         
-        // m.member.voice.channel.join().then(connection => {
-        //     say.speak(user);
+//         // m.member.voice.channel.join().then(connection => {
+//         //     say.speak(user);
             
-        // });
-        // m.member.voice.channel.leave()
+//         // });
+//         // m.member.voice.channel.leave()
         
         
-        // .then(connection => console.log('connected!')).catch(console.error);
-            // const stream = getVoiceStream("테스트 TTS", "ko-KR");
-            // const dispatcher = connection.play(stream);
-            // dispatcher.on("finish", () => m.member.voice.channel.leave());
+//         // .then(connection => console.log('connected!')).catch(console.error);
+//             // const stream = getVoiceStream("테스트 TTS", "ko-KR");
+//             // const dispatcher = connection.play(stream);
+//             // dispatcher.on("finish", () => m.member.voice.channel.leave());
        
-    }
+//     }
 
 
-})
+// })
 
 
 app.login(token); // Bot의 토큰을 받아주세요. 0편에서 받은 봇의 토큰으로 로그인하는 코드입니다.
