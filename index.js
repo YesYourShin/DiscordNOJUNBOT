@@ -10,6 +10,8 @@ const say = require('say')
 
 const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
 
+const fs = require('fs');
+
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
 });
@@ -70,40 +72,99 @@ app.on('message', msg => {
 });
 
 
-// app.on('voiceStateUpdate', m => {
-//     let memberName = m.member.displayName;
+app.on('voiceStateUpdate', m => {
+    let memberName = m.member.displayName;
+    // let presence = m.member.id;
+
+    // let newUserChannel = newMember.member.id;
+    // let oldUserChannel = newMember.channel.id;
     
-//     console.log(memberName);
+    // if(newUserChannel) {
+    //     console.log('join!');
+    // } else if (oldUserChannel && newUserChannel !== oldUserChannel) {
+    //     console.log('leave!');
 
+    // }
     
-//     if(memberName === 'BRORY') {
-//         // 채널을 지정해주는 함수
-//         const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
-//         const user = m.guild.member(memberName);
+    // console.log(presence);
+    
 
-//         // 해당 채널에 메세지를 보냄
-//         // channel.send(member.mentions.user +"dddd");
 
+
+
+    if(memberName === 'BRORY' || memberName === '김진홍') {
+    // if(presence) {
+        // 채널을 지정해주는 함수
+        // const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
+        // const user = m.guild.member(memberName);
+
+        // 해당 채널에 메세지를 보냄
+        // channel.send(member.mentions.user +"dddd");
+        // const dispatcher = connection.play('./노준어서와.mp3');
+        // const dispatcher = m.connection('./노준어서와.mp3');
+        // dispatcher.on("end", end => voiceChannel.leave());
         
-//         m.member.voice.channel.join()
-//         say.speak('an nyeong ha se yo');
+        // m.member.voice.channel.join();
+
+        // const connection = m.member.voice.channel.join();
+        // const dispatcher = connection.play('./nojunhello.mp3', { volume: 0.5 });
+
+        // dispatcher.on('finish', () => {
+        //     dispatcher.destroy();
+        // })
+        // var voiceChannel = m.member.voice.channel;
+
+        // voiceChannel.join()
+        //     .then(connection =>{
+        //         const dispatcher = connection.play('./nojunhello.mp3');
+        //         dispatcher.on("finish", end => {
+        //             voiceChannel.leave();
+        //         });
+        //     }).catch(err => console.log(err));
+
+        // m.member.voice.channel.join();
         
-//         // m.member.voice.channel.join().then(connection => {
-//         //     say.speak(user);
+        // say.speak(dispatcher);
+        
+        // m.member.voice.channel.join().then(connection => {
+        //     say.speak(dispatcher);
             
-//         // });
-//         // m.member.voice.channel.leave()
+        // });
+        // m.member.voice.channel.leave()
+
         
         
-//         // .then(connection => console.log('connected!')).catch(console.error);
-//             // const stream = getVoiceStream("테스트 TTS", "ko-KR");
-//             // const dispatcher = connection.play(stream);
-//             // dispatcher.on("finish", () => m.member.voice.channel.leave());
-       
-//     }
+        
+        // .then(connection => console.log('connected!')).catch(console.error);
+            // const stream = getVoiceStream("테스트 TTS", "ko-KR");
+            // const dispatcher = connection.play(stream);
+            // dispatcher.on("finish", () => m.member.voice.channel.leave());
+            
 
 
-// })
+
+
+
+            var voiceChannel = m.member.voice.channel;
+            console.log(voiceChannel);
+            voiceChannel.join()
+                .then(connection =>{
+                    const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
+                    // dispatcher.on('start', () => {
+                    //     console.log('audio.mp3 is now playing!');
+                    // });
+                    dispatcher.on("finish", end => {
+                        voiceChannel.leave();
+                    });
+                }).catch(err => console.log(err));
+
+
+
+
+    }
+
+
+})
 
 
 app.login(token); // Bot의 토큰을 받아주세요. 0편에서 받은 봇의 토큰으로 로그인하는 코드입니다.
