@@ -1,31 +1,12 @@
 {
-  "name": "nodejs",
-  "version": "1.0.0",
-  "description": "DiscordBot",
-  "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YesYourShin/DiscordNOJUNBOT.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/YesYourShin/DiscordNOJUNBOT/issues"
-  },
-  "homepage": "https://github.com/YesYourShin/DiscordNOJUNBOT#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
-    "d-tts": "^2.0.1",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "ffmpeg-static": "^4.4.0",
-    "grpc": "^1.24.10",
-    "node-gyp": "^8.1.0",
-    "nodemon": "^2.0.7",
-    "opusscript": "^0.0.8",
-    "say": "^0.16.0"
+    "nodemon": "^2.0.12"
   }
 }

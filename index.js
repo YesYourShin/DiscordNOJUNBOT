@@ -5,12 +5,13 @@ const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
 
-const {getVoiceStream} = require("d-tts");
-const say = require('say')
+// const {getVoiceStream} = require("d-tts");
+// const say = require('say')
 
 const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
 
-const fs = require('fs');
+// const prism = require('prism-media');
+// const fs = require('fs');
 
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
@@ -72,12 +73,57 @@ app.on('message', msg => {
 });
 
 
-app.on('voiceStateUpdate', m => {
-    let memberName = m.member.displayName;
+app.on('voiceStateUpdate', (oldState, newState) => {
+    if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
+        return;
+    } 
+
+    let voiceChannel = newState.member.voice.channel;
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
+            dispatcher.on('start', () => {
+                console.log('audio.mp3 is now playing!');
+            });
+            // console.log('OK');
+            // dispatcher.on("finish", end => {
+            //     voiceChannel.leave();
+            // });
+    }).catch(err => console.log(err));
+    
+    // if(newState.channel) {
+        
+    //     console.log('join!');
+    //     const dispatcher = newState.member.voice.connection.play('/res/nojunhello.mp3', {volume: 1});
+    //         dispatcher.on('start', () => {
+    //             console.log('audio.mp3 is now playing!');
+    //         });
+    // } else if (oldState.channel) {
+    //     console.log('leave!');
+
+    // }
+
+//          var voiceChannel = m.member.voice.channel;
+            // console.log(voiceChannel);
+            // voiceChannel.join()
+            //     .then(connection =>{
+            //         const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
+            //         // dispatcher.on('start', () => {
+            //         //     console.log('audio.mp3 is now playing!');
+            //         // });
+            //         dispatcher.on("finish", end => {
+            //             voiceChannel.leave();
+            //         });
+            //     }).catch(err => console.log(err));
+
+
+
+    // newState.member.voice.channel.join()
+
+    // let memberName = m.member.displayName;
     // let presence = m.member.id;
 
     // let newUserChannel = newMember.member.id;
-    // let oldUserChannel = newMember.channel.id;
+    // let oldUserChannel = oldMember.member.id;
     
     // if(newUserChannel) {
     //     console.log('join!');
@@ -86,13 +132,21 @@ app.on('voiceStateUpdate', m => {
 
     // }
     
+
+    // let newUserChannel = newMember.member.id;
+    // let oldUserChannel = oldMember.member.id;
+    
+    // voiceChannel.join()
+    
+
+
     // console.log(presence);
     
 
 
 
 
-    if(memberName === 'BRORY' || memberName === '김진홍') {
+    // if(memberName === 'BRORY' || memberName === '김진홍') {
     // if(presence) {
         // 채널을 지정해주는 함수
         // const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
@@ -145,23 +199,23 @@ app.on('voiceStateUpdate', m => {
 
 
 
-            var voiceChannel = m.member.voice.channel;
-            console.log(voiceChannel);
-            voiceChannel.join()
-                .then(connection =>{
-                    const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
-                    // dispatcher.on('start', () => {
-                    //     console.log('audio.mp3 is now playing!');
-                    // });
-                    dispatcher.on("finish", end => {
-                        voiceChannel.leave();
-                    });
-                }).catch(err => console.log(err));
+            // var voiceChannel = m.member.voice.channel;
+            // console.log(voiceChannel);
+            // voiceChannel.join()
+            //     .then(connection =>{
+            //         const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
+            //         // dispatcher.on('start', () => {
+            //         //     console.log('audio.mp3 is now playing!');
+            //         // });
+            //         dispatcher.on("finish", end => {
+            //             voiceChannel.leave();
+            //         });
+            //     }).catch(err => console.log(err));
 
 
 
 
-    }
+    // }
 
 
 })
