@@ -77,18 +77,20 @@ app.on('voiceStateUpdate', (oldState, newState) => {
     if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
         return;
     } 
-
     let voiceChannel = newState.member.voice.channel;
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
-            dispatcher.on('start', () => {
-                console.log('audio.mp3 is now playing!');
-            });
-            // console.log('OK');
-            // dispatcher.on("finish", end => {
-            //     voiceChannel.leave();
-            // });
-    }).catch(err => console.log(err));
+    
+    if(voiceChannel != null) {
+        voiceChannel.join().then(connection => {
+            const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
+                dispatcher.on('start', () => {
+                    console.log('audio.mp3 is now playing!');
+                });
+                // console.log('OK');
+                // dispatcher.on("finish", end => {
+                //     voiceChannel.leave();
+                // });
+        }).catch(err => console.log(err));
+    }
     
     // if(newState.channel) {
         
