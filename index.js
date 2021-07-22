@@ -82,13 +82,13 @@ app.on('voiceStateUpdate', (oldState, newState) => {
     if(voiceChannel != null) {
         voiceChannel.join().then(connection => {
             const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
-                dispatcher.on('start', () => {
-                    console.log('audio.mp3 is now playing!');
-                });
-                // console.log('OK');
-                // dispatcher.on("finish", end => {
-                //     voiceChannel.leave();
+                // dispatcher.on('start', () => {
+                //     console.log('audio.mp3 is now playing!');
                 // });
+                // console.log('OK');
+                dispatcher.on("finish", end => {
+                    voiceChannel.leave();
+                });
         }).catch(err => console.log(err));
     }
     
