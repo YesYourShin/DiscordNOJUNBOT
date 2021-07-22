@@ -4,6 +4,7 @@ const dictionary = require('./dictionary');
 const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
+const queue = require('block-queue');
 
 // const {getVoiceStream} = require("d-tts");
 // const say = require('say')
@@ -72,154 +73,28 @@ app.on('message', msg => {
 
 });
 
+const userJoin = queue(1, function(voiceChannel, done) {
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
+        dispatcher.on('finish', () => {
+            console.log('audio.mp3 is now playing!');
+            done(); 
+        })
+    }).catch(err => console.log(err));
+})
 
 app.on('voiceStateUpdate', (oldState, newState) => {
     if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
         return;
     } 
     let voiceChannel = newState.member.voice.channel;
-    
+
+    // console.log(newState);
+    // console.log(oldState);
+
     if(voiceChannel != null) {
-        voiceChannel.join().then(connection => {
-            const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
-                // dispatcher.on('start', () => {
-                //     console.log('audio.mp3 is now playing!');
-                // });
-                // console.log('OK');
-                dispatcher.on("finish", end => {
-                    voiceChannel.leave();
-                });
-        }).catch(err => console.log(err));
+        userJoin.push(voiceChannel);
     }
-    
-    // if(newState.channel) {
-        
-    //     console.log('join!');
-    //     const dispatcher = newState.member.voice.connection.play('/res/nojunhello.mp3', {volume: 1});
-    //         dispatcher.on('start', () => {
-    //             console.log('audio.mp3 is now playing!');
-    //         });
-    // } else if (oldState.channel) {
-    //     console.log('leave!');
-
-    // }
-
-//          var voiceChannel = m.member.voice.channel;
-            // console.log(voiceChannel);
-            // voiceChannel.join()
-            //     .then(connection =>{
-            //         const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
-            //         // dispatcher.on('start', () => {
-            //         //     console.log('audio.mp3 is now playing!');
-            //         // });
-            //         dispatcher.on("finish", end => {
-            //             voiceChannel.leave();
-            //         });
-            //     }).catch(err => console.log(err));
-
-
-
-    // newState.member.voice.channel.join()
-
-    // let memberName = m.member.displayName;
-    // let presence = m.member.id;
-
-    // let newUserChannel = newMember.member.id;
-    // let oldUserChannel = oldMember.member.id;
-    
-    // if(newUserChannel) {
-    //     console.log('join!');
-    // } else if (oldUserChannel && newUserChannel !== oldUserChannel) {
-    //     console.log('leave!');
-
-    // }
-    
-
-    // let newUserChannel = newMember.member.id;
-    // let oldUserChannel = oldMember.member.id;
-    
-    // voiceChannel.join()
-    
-
-
-    // console.log(presence);
-    
-
-
-
-
-    // if(memberName === 'BRORY' || memberName === '김진홍') {
-    // if(presence) {
-        // 채널을 지정해주는 함수
-        // const channel = m.guild.channels.cache.find(channel => channel.name === "ㄱㄱ");
-        // const user = m.guild.member(memberName);
-
-        // 해당 채널에 메세지를 보냄
-        // channel.send(member.mentions.user +"dddd");
-        // const dispatcher = connection.play('./노준어서와.mp3');
-        // const dispatcher = m.connection('./노준어서와.mp3');
-        // dispatcher.on("end", end => voiceChannel.leave());
-        
-        // m.member.voice.channel.join();
-
-        // const connection = m.member.voice.channel.join();
-        // const dispatcher = connection.play('./nojunhello.mp3', { volume: 0.5 });
-
-        // dispatcher.on('finish', () => {
-        //     dispatcher.destroy();
-        // })
-        // var voiceChannel = m.member.voice.channel;
-
-        // voiceChannel.join()
-        //     .then(connection =>{
-        //         const dispatcher = connection.play('./nojunhello.mp3');
-        //         dispatcher.on("finish", end => {
-        //             voiceChannel.leave();
-        //         });
-        //     }).catch(err => console.log(err));
-
-        // m.member.voice.channel.join();
-        
-        // say.speak(dispatcher);
-        
-        // m.member.voice.channel.join().then(connection => {
-        //     say.speak(dispatcher);
-            
-        // });
-        // m.member.voice.channel.leave()
-
-        
-        
-        
-        // .then(connection => console.log('connected!')).catch(console.error);
-            // const stream = getVoiceStream("테스트 TTS", "ko-KR");
-            // const dispatcher = connection.play(stream);
-            // dispatcher.on("finish", () => m.member.voice.channel.leave());
-            
-
-
-
-
-
-            // var voiceChannel = m.member.voice.channel;
-            // console.log(voiceChannel);
-            // voiceChannel.join()
-            //     .then(connection =>{
-            //         const dispatcher = connection.play('./nojunhello.mp3', {volume: 1});
-            //         // dispatcher.on('start', () => {
-            //         //     console.log('audio.mp3 is now playing!');
-            //         // });
-            //         dispatcher.on("finish", end => {
-            //             voiceChannel.leave();
-            //         });
-            //     }).catch(err => console.log(err));
-
-
-
-
-    // }
-
-
 })
 
 
