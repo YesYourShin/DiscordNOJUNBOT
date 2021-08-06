@@ -89,6 +89,8 @@ app.on('voiceStateUpdate', (oldState, newState) => {
     } 
     let voiceChannel = newState.member.voice.channel;
 
+    // https://discordjs.github.io/voice/
+
     // console.log(newState);
     // console.log(oldState);
 

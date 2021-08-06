@@ -4,6 +4,7 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
+    "@discordjs/voice": "^0.5.4",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "ffmpeg-static": "^4.4.0",
