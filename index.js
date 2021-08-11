@@ -75,13 +75,64 @@ app.on('message', msg => {
 
 const userJoin = queue(1, function(voiceChannel, done) {
     voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunhello.ogg', {volume: 1});
-        dispatcher.on('finish', () => {
-            console.log('audio.mp3 is now playing!');
-            done(); 
+        const dispatcher = connection.play('res/nojunhello.mp3', {volume: 1});
+        dispatcher.on('finish', end => {
+            console.log('nojunhello.mp3 is now playing!');
+            done();
         })
     }).catch(err => console.log(err));
-})
+});
+
+const userLeave = queue(1, function(voiceChannel, done) {
+    console.log('here userLeave');
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunbye.mp3', {volume: 1});
+        dispatcher.on('finish', end => {
+            console.log('nojunbye.mp3 is now playing!');
+            done();
+        })
+    }).catch(err => console.log(err));
+});
+
+// const userDeaf = queue(1, function(voiceChannel, done) {
+//     voiceChannel.join().then(connection => {
+//         const dispatcher = connection.play('res/nojundeaf.mp3', {volume: 1});
+//         dispatcher.on('finish', end => {
+//             console.log('nojundeaf.mp3 is now playing!');
+//             done();
+//         })
+//     }).catch(err => console.log(err));
+// });
+
+const userMute = queue(1, function(voiceChannel, done) {
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunmute.mp3', {volume: 1});
+        dispatcher.on('finish', end => {
+            console.log('nojunmute.mp3 is now playing!');
+            done();
+        })
+    }).catch(err => console.log(err));
+});
+
+const userVideo = queue(1, function(voiceChannel, done) {
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunvideo.mp3', {volume: 1});
+        dispatcher.on('finish', end => {
+            console.log('nojunvideo.mp3 is now playing!');
+            done();
+        })
+    }).catch(err => console.log(err));
+});
+
+const userStreaming = queue(1, function(voiceChannel, done) {
+    voiceChannel.join().then(connection => {
+        const dispatcher = connection.play('res/nojunstreaming.mp3', {volume: 1});
+        dispatcher.on('finish', end => {
+            console.log('nojunstreaming.mp3 is now playing!');
+            done();
+        })
+    }).catch(err => console.log(err));
+});
 
 app.on('voiceStateUpdate', (oldState, newState) => {
     if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
@@ -91,11 +142,56 @@ app.on('voiceStateUpdate', (oldState, newState) => {
 
     // https://discordjs.github.io/voice/
 
-    // console.log(newState);
-    // console.log(oldState);
+    console.log('newState.channelID: ' + Boolean(newState.channelID));
+    console.log('oldState.channelID: ' + Boolean(oldState.channelID));
+    console.log('newState.selfVideo: ' + Boolean(newState.selfVideo));
+    console.log('oldState.selfVideo: ' + Boolean(oldState.selfVideo));
 
-    if(voiceChannel != null) {
-        userJoin.push(voiceChannel);
+    // 유저가 음성 채널에 들어왔을 때 실행
+    if(oldState.channelID != newState.channelID) {
+        if(! Boolean(newState.channelID)) {
+            console.log('userLeave');
+            userLeave.push(voiceChannel);
+        } else {
+            userJoin.push(voiceChannel);
+        }
+    }
+
+    // 유저가 음성 채널에서 나갔을 때 실행
+    // if(Boolean(oldState.channelID) == true && Boolean(newState.channelID) == false) {
+    //     userLeave.push(voiceChannel);
+    // }
+
+    // // 유저가 헤드셋 음소거를 했을 때 실행
+    // if(oldState.selfDeaf != newState.selfDeaf) {
+    //     if(Boolean(oldState.selfDeaf) == true && Boolean(newState.selfDeaf) == false) {
+    //         return;
+    //     }
+    //     userDeaf.push(voiceChannel);
+    // }
+
+    // 유저가 음소거를 했을 때 실행
+    if(oldState.selfMute != newState.selfMute) {
+        if(Boolean(oldState.selfMute) == true && Boolean(newState.selfMute) == false) {
+            return;
+        }
+        userMute.push(voiceChannel);
+    }
+
+    // 유저가 영상 통화를 했을 때
+    if(oldState.selfVideo != newState.selfVideo) {
+        if(Boolean(oldState.selfVideo) == true && Boolean(newState.selfVideo) == false) {
+            return;
+        }
+        userVideo.push(voiceChannel);
+    }
+
+    // 유저가 스트리밍을 했을 때
+    if(oldState.streaming != newState.streaming) {
+        if(Boolean(oldState.streaming) == true && Boolean(newState.streaming) == false) {
+            return;
+        }
+        userStreaming.push(voiceChannel);
     }
 })
 
