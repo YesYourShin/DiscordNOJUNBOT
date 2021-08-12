@@ -138,20 +138,20 @@ app.on('voiceStateUpdate', (oldState, newState) => {
     if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
         return;
     } 
-    let voiceChannel = newState.member.voice.channel;
+    const voiceChannel = newState.member.voice.channel;
+    const oldVoiceChannel = oldState.member.voice.channel;
 
     // https://discordjs.github.io/voice/
 
-    console.log('newState.channelID: ' + Boolean(newState.channelID));
-    console.log('oldState.channelID: ' + Boolean(oldState.channelID));
-    console.log('newState.selfVideo: ' + Boolean(newState.selfVideo));
-    console.log('oldState.selfVideo: ' + Boolean(oldState.selfVideo));
+    console.log('newState.channelID: ' + newState.channelID);
+    console.log('oldState.channelID: ' + oldState.channelID);
+    console.log('voiceChannel' + newState.member.voice.channel);
 
     // 유저가 음성 채널에 들어왔을 때 실행
     if(oldState.channelID != newState.channelID) {
         if(! Boolean(newState.channelID)) {
             console.log('userLeave');
-            userLeave.push(voiceChannel);
+            userLeave.push(oldVoiceChannel);
         } else {
             userJoin.push(voiceChannel);
         }
@@ -171,26 +171,17 @@ app.on('voiceStateUpdate', (oldState, newState) => {
     // }
 
     // 유저가 음소거를 했을 때 실행
-    if(oldState.selfMute != newState.selfMute) {
-        if(Boolean(oldState.selfMute) == true && Boolean(newState.selfMute) == false) {
-            return;
-        }
+    if(!Boolean(oldState.selfMute) && Boolean(newState.selfMute)) {
         userMute.push(voiceChannel);
     }
 
     // 유저가 영상 통화를 했을 때
-    if(oldState.selfVideo != newState.selfVideo) {
-        if(Boolean(oldState.selfVideo) == true && Boolean(newState.selfVideo) == false) {
-            return;
-        }
+    if(!Boolean(oldState.selfVideo) && Boolean(newState.selfVideo)) {
         userVideo.push(voiceChannel);
     }
 
     // 유저가 스트리밍을 했을 때
-    if(oldState.streaming != newState.streaming) {
-        if(Boolean(oldState.streaming) == true && Boolean(newState.streaming) == false) {
-            return;
-        }
+    if(!Boolean(oldState.streaming) && Boolean(newState.streaming)) {
         userStreaming.push(voiceChannel);
     }
 })
