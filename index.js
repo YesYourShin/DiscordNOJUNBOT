@@ -81,8 +81,9 @@ let leaveTimeout;
 const queue = new BlockQueue(function({voiceChannel, filename}, done) {
     console.log('queue filename: ' + filename);
     clearTimeout(leaveTimeout);
-    setTimeout(()=>{
+    
     voiceChannel.join().then(c => {
+        // setTimeout(()=>{
         const dispatcher = c.play(`res/${filename}`, {volume: 1});
         dispatcher.on('finish', end => {
             // voiceChannel.leave();
@@ -96,7 +97,8 @@ const queue = new BlockQueue(function({voiceChannel, filename}, done) {
             done();
         })
         dispatcher.on('error', () => done())
-    }).catch(err=>done())}, 1000)
+    // }, 700)
+    }).catch(err=>done())
 })
 
 app.on('voiceStateUpdate', (oldState, newState) => {
