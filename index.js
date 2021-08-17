@@ -96,7 +96,7 @@ const queue = new BlockQueue(function({voiceChannel, filename}, done) {
             done();
         })
         dispatcher.on('error', () => done())
-    }).catch(err=>done())}, 100)
+    }).catch(err=>done())}, 1000)
 })
 
 app.on('voiceStateUpdate', (oldState, newState) => {
