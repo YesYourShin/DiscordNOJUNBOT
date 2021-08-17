@@ -1,3 +1,19 @@
+Discord.js 공식 가이드 - 게이트웨이 인텐트
+https://discordjs.guide/popular-topics/intents.html#enabling-intents
+
+Discord 개발자 문서 - 게이트웨이 인텐트
+https://discord.com/developers/docs/topics/gateway
+
+게이트웨이 업데이트 FAQ
+https://support-dev.discord.com/hc/en-us/articles/360056426994
+
+Discord APi Github - 문제 1363 - 권한 있는 인텐트
+https://github.com/discord/discord-api-docs/issues/1363
+
+Discord 블로그 - Discord에서 봇의 미래
+https://blog.discord.com/the-future-of-bots-on-discord-4e6e050ab52e
+
+
 노준 봇 기능
 
 
@@ -36,3 +52,10 @@
 4. 다른 유저가 노준 이라고 채팅을 하면 거기에 반응해서 채팅 보내기
 
     - ~~채팅을 했을 때 문장 안에 '노준'이 들어가 있으면 'ㄷㅊ!'라고 채팅함~~
+
+
+노준 봇 사용 법
+
+ - git clone (git 주소)
+
+ - git 

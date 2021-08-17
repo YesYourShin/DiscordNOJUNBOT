@@ -4,15 +4,18 @@ const dictionary = require('./dictionary');
 const anyWords = require('./anywords');
 const discord = require('discord.js'); // discord.js를 import 해줍니다.
 const app = new discord.Client(); // discord.Client 인스턴스 생성
-const queue = require('block-queue');
+
+// const myIntents = new discord.Intents(discord.Intents.ALL) //fuck intents discord
+// const {discord, intents} = require('discord.js');
+// const app = new discord.Client({ ws: { intents: 'GUILD_VOICE_STATES' } }); // the fix <3
+
+const BlockQueue = require('block-queue');
 
 // const {getVoiceStream} = require("d-tts");
 // const say = require('say')
 
 const sejongDict = dictionary.makeDictionary(process.env.DICTIONARY);
 
-// const prism = require('prism-media');
-// const fs = require('fs');
 
 app.on('ready', () => { // 여기서 사용되는 Arrow Function은 콜백함수입니다.
     console.log(`I am Ready ${app.user.tag}`); // Bot이 준비가 되면 실행할 콜백함수입니다.
@@ -73,89 +76,63 @@ app.on('message', msg => {
 
 });
 
-const userJoin = queue(1, function(voiceChannel, done) {
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunhello.mp3', {volume: 1});
-        dispatcher.on('finish', end => {
-            console.log('nojunhello.mp3 is now playing!');
-            done();
-        })
-    }).catch(err => console.log(err));
-});
+let connection = null;
 
-const userLeave = queue(1, function(voiceChannel, done) {
-    console.log('here userLeave');
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunbye.mp3', {volume: 1});
-        dispatcher.on('finish', end => {
-            console.log('nojunbye.mp3 is now playing!');
-            done();
-        })
-    }).catch(err => console.log(err));
-});
+let leaveTimeout;
 
-// const userDeaf = queue(1, function(voiceChannel, done) {
-//     voiceChannel.join().then(connection => {
-//         const dispatcher = connection.play('res/nojundeaf.mp3', {volume: 1});
-//         dispatcher.on('finish', end => {
-//             console.log('nojundeaf.mp3 is now playing!');
-//             done();
-//         })
-//     }).catch(err => console.log(err));
-// });
-
-const userMute = queue(1, function(voiceChannel, done) {
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunmute.mp3', {volume: 1});
+const queue = new BlockQueue(function({voiceChannel, filename}, done) {
+    function play(c) {
+        if (!c) return;
+        clearTimeout(leaveTimeout);
+        const dispatcher = c.play(`res/${filename}`, {volume: 1});
         dispatcher.on('finish', end => {
-            console.log('nojunmute.mp3 is now playing!');
             done();
+            leaveTimeout = setTimeout(()=>{
+                if (c != null){
+                    c.channel.leave();
+                    c = null;
+                }
+            }, 3000);
         })
-    }).catch(err => console.log(err));
-});
-
-const userVideo = queue(1, function(voiceChannel, done) {
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunvideo.mp3', {volume: 1});
-        dispatcher.on('finish', end => {
-            console.log('nojunvideo.mp3 is now playing!');
-            done();
-        })
-    }).catch(err => console.log(err));
-});
-
-const userStreaming = queue(1, function(voiceChannel, done) {
-    voiceChannel.join().then(connection => {
-        const dispatcher = connection.play('res/nojunstreaming.mp3', {volume: 1});
-        dispatcher.on('finish', end => {
-            console.log('nojunstreaming.mp3 is now playing!');
-            done();
-        })
-    }).catch(err => console.log(err));
-});
+    }
+    if (connection == null || voiceChannel.id != connection.channel.id) {
+        voiceChannel.join().then(c => {
+            connection = c;
+            play(connection);
+        }).catch(err => console.log(err));
+    } else {
+        play(connection);
+    }
+})
 
 app.on('voiceStateUpdate', (oldState, newState) => {
     if(newState.member.user.bot) { // 메세지를 보낸 사용자가 봇일 경우 중단
         return;
     } 
-    const voiceChannel = newState.member.voice.channel;
-    const oldVoiceChannel = oldState.member.voice.channel;
+    const voiceChannel = newState.channel || oldState.channel;
 
     // https://discordjs.github.io/voice/
 
     console.log('newState.channelID: ' + newState.channelID);
     console.log('oldState.channelID: ' + oldState.channelID);
-    console.log('voiceChannel' + newState.member.voice.channel);
+    console.log('voiceChannel' + voiceChannel);
 
-    // 유저가 음성 채널에 들어왔을 때 실행
+
+    let filename;
+    // 유저가 음성 채널에 들어왔을 때 혹은 나갔을 때 실행
     if(oldState.channelID != newState.channelID) {
-        if(! Boolean(newState.channelID)) {
+        
+        if(!newState.channelID) {
             console.log('userLeave');
-            userLeave.push(oldVoiceChannel);
+            filename = 'nojunbye.mp3';
         } else {
-            userJoin.push(voiceChannel);
+            filename = 'nojunhello.mp3';
         }
+
+        
     }
+    
+    
 
     // 유저가 음성 채널에서 나갔을 때 실행
     // if(Boolean(oldState.channelID) == true && Boolean(newState.channelID) == false) {
@@ -172,18 +149,20 @@ app.on('voiceStateUpdate', (oldState, newState) => {
 
     // 유저가 음소거를 했을 때 실행
     if(!Boolean(oldState.selfMute) && Boolean(newState.selfMute)) {
-        userMute.push(voiceChannel);
+        filename = 'nojunmute.mp3';
     }
 
     // 유저가 영상 통화를 했을 때
     if(!Boolean(oldState.selfVideo) && Boolean(newState.selfVideo)) {
-        userVideo.push(voiceChannel);
+        filename = 'nojunvideo.mp3';
     }
 
     // 유저가 스트리밍을 했을 때
     if(!Boolean(oldState.streaming) && Boolean(newState.streaming)) {
-        userStreaming.push(voiceChannel);
+        filename = 'nojunstreaming.mp3';
     }
+
+    queue.push({voiceChannel, filename})
 })
 
 
