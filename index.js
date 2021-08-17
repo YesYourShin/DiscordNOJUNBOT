@@ -76,33 +76,26 @@ app.on('message', msg => {
 
 });
 
-let connection = null;
-
 let leaveTimeout;
 
 const queue = new BlockQueue(function({voiceChannel, filename}, done) {
-    function play(c) {
-        if (!c) return;
-        clearTimeout(leaveTimeout);
+    console.log('queue filename: ' + filename);
+    clearTimeout(leaveTimeout);
+    voiceChannel.join().then(c => {
         const dispatcher = c.play(`res/${filename}`, {volume: 1});
         dispatcher.on('finish', end => {
-            done();
+            // voiceChannel.leave();
+            
             leaveTimeout = setTimeout(()=>{
                 if (c != null){
                     c.channel.leave();
                     c = null;
                 }
             }, 3000);
+            done();
         })
-    }
-    if (connection == null || voiceChannel.id != connection.channel.id) {
-        voiceChannel.join().then(c => {
-            connection = c;
-            play(connection);
-        }).catch(err => console.log(err));
-    } else {
-        play(connection);
-    }
+        dispatcher.on('error', () => done())
+    }).catch(err=>done())
 })
 
 app.on('voiceStateUpdate', (oldState, newState) => {
@@ -115,7 +108,7 @@ app.on('voiceStateUpdate', (oldState, newState) => {
 
     console.log('newState.channelID: ' + newState.channelID);
     console.log('oldState.channelID: ' + oldState.channelID);
-    console.log('voiceChannel' + voiceChannel);
+    console.log('voiceChannel: ' + voiceChannel);
 
 
     let filename;
@@ -130,39 +123,29 @@ app.on('voiceStateUpdate', (oldState, newState) => {
         }
 
         
-    }
-    
-    
+    } else {
 
-    // 유저가 음성 채널에서 나갔을 때 실행
-    // if(Boolean(oldState.channelID) == true && Boolean(newState.channelID) == false) {
-    //     userLeave.push(voiceChannel);
-    // }
+        // 유저가 음소거를 했을 때 실행
+        if(!Boolean(oldState.selfMute) && Boolean(newState.selfMute)) {
+            filename = 'nojunmute.mp3';
+        }
 
-    // // 유저가 헤드셋 음소거를 했을 때 실행
-    // if(oldState.selfDeaf != newState.selfDeaf) {
-    //     if(Boolean(oldState.selfDeaf) == true && Boolean(newState.selfDeaf) == false) {
-    //         return;
-    //     }
-    //     userDeaf.push(voiceChannel);
-    // }
+        // 유저가 영상 통화를 했을 때
+        if(!Boolean(oldState.selfVideo) && Boolean(newState.selfVideo)) {
+            filename = 'nojunvideo.mp3';
+        }
 
-    // 유저가 음소거를 했을 때 실행
-    if(!Boolean(oldState.selfMute) && Boolean(newState.selfMute)) {
-        filename = 'nojunmute.mp3';
+        // 유저가 스트리밍을 했을 때
+        if(!Boolean(oldState.streaming) && Boolean(newState.streaming)) {
+            filename = 'nojunstreaming.mp3';
+        }
     }
 
-    // 유저가 영상 통화를 했을 때
-    if(!Boolean(oldState.selfVideo) && Boolean(newState.selfVideo)) {
-        filename = 'nojunvideo.mp3';
-    }
+    if (filename) {
+        console.log('filename: ' + filename);
+        queue.push({voiceChannel, filename})
 
-    // 유저가 스트리밍을 했을 때
-    if(!Boolean(oldState.streaming) && Boolean(newState.streaming)) {
-        filename = 'nojunstreaming.mp3';
     }
-
-    queue.push({voiceChannel, filename})
 })
 
 
