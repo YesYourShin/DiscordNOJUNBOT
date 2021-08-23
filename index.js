@@ -96,7 +96,7 @@ const queue = new BlockQueue(function({voiceChannel, filename}, done) {
                 done();
             })
             dispatcher.on('error', () => done())
-        }, 1000)
+        }, 2000)
     }).catch(err=>done())
 })
 
