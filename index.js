@@ -83,21 +83,20 @@ const queue = new BlockQueue(function({voiceChannel, filename}, done) {
     clearTimeout(leaveTimeout);
     
     voiceChannel.join().then(c => {
-        // setTimeout(()=>{
-        const dispatcher = c.play(`res/${filename}`, {volume: 1});
-        dispatcher.on('finish', end => {
-            // voiceChannel.leave();
-            
-            leaveTimeout = setTimeout(()=>{
-                if (c != null){
-                    c.channel.leave();
-                    c = null;
-                }
-            }, 3000);
-            done();
-        })
-        dispatcher.on('error', () => done())
-    // }, 700)
+        setTimeout(()=>{
+            const dispatcher = c.play(`res/${filename}`, {volume: 1});
+            dispatcher.on('finish', end => {
+                
+                leaveTimeout = setTimeout(()=>{
+                    if (c != null){
+                        c.channel.leave();
+                        c = null;
+                    }
+                }, 3000);
+                done();
+            })
+            dispatcher.on('error', () => done())
+        }, 700)
     }).catch(err=>done())
 })
 
