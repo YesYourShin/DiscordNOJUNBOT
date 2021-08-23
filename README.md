@@ -1,19 +1,3 @@
-Discord.js 공식 가이드 - 게이트웨이 인텐트
-https://discordjs.guide/popular-topics/intents.html#enabling-intents
-
-Discord 개발자 문서 - 게이트웨이 인텐트
-https://discord.com/developers/docs/topics/gateway
-
-게이트웨이 업데이트 FAQ
-https://support-dev.discord.com/hc/en-us/articles/360056426994
-
-Discord APi Github - 문제 1363 - 권한 있는 인텐트
-https://github.com/discord/discord-api-docs/issues/1363
-
-Discord 블로그 - Discord에서 봇의 미래
-https://blog.discord.com/the-future-of-bots-on-discord-4e6e050ab52e
-
-
 노준 봇 기능
 
 
@@ -33,11 +17,11 @@ https://blog.discord.com/the-future-of-bots-on-discord-4e6e050ab52e
 
     - ~~마이크를 껐을 때, 영상통화를 켰을 때, 화면공유를 했을 때 음원파일을 재생함~~
 
-    - 파일 재생이 끝난 후 자동으로 채팅방을 나감
+    - ~~음원 파일 재생을 2초 지연시키고 재생시키기~~ 
+
+    - ~~파일 재생이 끝난 후 자동으로 채팅방을 나감~~
 
     - TTS로 채팅방에 들어온 사람 이름을 말하며 인사하기
-
-    - 음원 파일 재생을 1초 지연시키고 재생시키기 
 
 
 3. 사진이 올라오면 반응해서 몇가지 말 중 하나를 랜덤으로 채팅 보내기
@@ -47,6 +31,8 @@ https://blog.discord.com/the-future-of-bots-on-discord-4e6e050ab52e
     - ~~사진으로 판단하는 기준 "png", "jpg", "gif", "webp", "jpeg"로 끝나는 첨부 파일~~
     
     - ~~특정 유저가 올리는 사진에는 무조건 '노꼴' 채팅만 보냄~~
+
+    - 첨부파일 확장자 대소문자 구분하지 않기
 
 
 4. 다른 유저가 노준 이라고 채팅을 하면 거기에 반응해서 채팅 보내기
@@ -58,4 +44,10 @@ https://blog.discord.com/the-future-of-bots-on-discord-4e6e050ab52e
 
  - git clone (git 주소)
 
- - git 
+ - clone된 파일에 .env 파일, res 폴더, dict 폴더 붙여넣기
+
+ - sudo systemctl enable 서비스이름.service 하면 켜짐
+
+ - sudo systemctl disable 서비스이름.service 하면 꺼짐
+
+ 
